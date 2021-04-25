@@ -10,7 +10,7 @@ import {
   Linking,
 } from 'react-native';
 import {windowHeight, windowWidth} from '../utils/Dimensions';
-import FormInput from '../LoginScreenFolder/FormInput';
+import FormInput from '../loginscreenfolder/FormInput';
 import {CommonActions} from '@react-navigation/native';
 
 const LoginScreen = ({navigation}) => {

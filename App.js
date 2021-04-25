@@ -1,28 +1,94 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Navbar } from './src/Navbar';
-import { Content } from './src/Content'
-import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import { StatusBar } from "expo-status-bar";
 
+import { Navbar } from "./src/Navbar";
+import { Content } from "./src/Content";
+import React, { useState } from "react";
+import { Text, View, Image, StyleSheet, Button, TextInput } from "react-native";
+import LoginScreen from "./loginscreenfolder/LoginScreen";
+import FormInput from "./loginscreenfolder/FormInput";
 
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
+const Stack = createStackNavigator();
 export default function App() {
+  const [phone, setPhone] = useState("");
   return (
-    <View>
-      <Navbar title="Настройки"/>
-      <Content/>
-    </View>
-  )
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Login"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+    // <View>
+    //   <Navbar title="Настройки"/>
+    //   <FormInput
+    //     labelValue={phone}
+    //     onChangeText={userPhone => setPhone(userPhone)}
+    //     placeholderText="Номер телефона"
+    //     iconType="phone"
+    //     keyboardType="phone-pad"
+    //     autoCapitalize="none"
+    //     autoCorrect={false}
+    //   />
+    //   <Content/>
+    // </View>
+  );
+}
+const Drawer = createDrawerNavigator();
+function DetailsScreen() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="N"
+      screenOptions={{
+        headerShown: true,
+      }}
+    >
+    <Drawer.Screen name="Home" component={HomeScreen} />
+    <Drawer.Screen name="Settings" component={Content} />
+
+    </Drawer.Navigator>
+    // <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    //   <Text>Details Screen</Text>
+    // </View>
+  );
 }
 
+function HomeScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Button
+        
+        title="Go to notifications"
+      />
+    </View>
+  );
+}
 const styles = StyleSheet.create({
-  container: {
+  center: {
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "lightcyan",
+  },
+  text: {
+    height: 40,
+    width: 200,
+    borderColor: "gray",
+    borderWidth: 1,
+  },
+  button: {
+    padding: 100,
   },
 });
