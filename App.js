@@ -31,19 +31,7 @@ export default function App() {
         <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-    // <View>
-    //   <Navbar title="Настройки"/>
-    //   <FormInput
-    //     labelValue={phone}
-    //     onChangeText={userPhone => setPhone(userPhone)}
-    //     placeholderText="Номер телефона"
-    //     iconType="phone"
-    //     keyboardType="phone-pad"
-    //     autoCapitalize="none"
-    //     autoCorrect={false}
-    //   />
-    //   <Content/>
-    // </View>
+    
   );
 }
 const Drawer = createDrawerNavigator();
@@ -59,9 +47,7 @@ function DetailsScreen() {
     <Drawer.Screen name="Settings" component={Content} />
 
     </Drawer.Navigator>
-    // <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-    //   <Text>Details Screen</Text>
-    // </View>
+    
   );
 }
 
