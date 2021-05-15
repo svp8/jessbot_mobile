@@ -24,6 +24,18 @@ const LoginScreen = ({navigation}) => {
   // });
   const checkPass = () => {
     if (password == 1) {
+      
+      var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+      var res = new XMLHttpRequest();
+      res.timeout = 1000;
+      res.open("post", "https://staging.jess-bot.ru/auth/init-login",false);
+      res.setRequestHeader("Content-Type", "application/json", "Access-Control-Allow-Origin", "*");
+      var data = JSON.stringify({
+          "phone": phone, "kekkonen.mode": "invoke",
+          "content-type": "application/json"
+      });
+      res.responseType = "json";
+      res.send(data);
       alert('You tapped the button!');
       // Переход в меню и очищение стэка окон (при нажатии кнопки назад из меню вы выходите из окна)
       navigation.dispatch(
