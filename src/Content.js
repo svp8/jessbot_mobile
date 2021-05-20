@@ -1,11 +1,12 @@
 import React from 'react'
-import {View,Text, Image, StyleSheet, TextInput,TouchableOpacity,Switch} from 'react-native'
+import {View,Text, Image, StyleSheet, TextInput,TouchableOpacity,Switch, ScrollView} from 'react-native'
 import ToggleSwitch from 'toggle-switch-react-native'
 
 export const Content = props => {
     const [isSwitchEnabled1, setSwitch1]= React.useState(false),
     [isSwitchEnabled2, setSwitch2]= React.useState(false)
     return (
+        <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
             
             <View style={styles.icontext}>
@@ -76,6 +77,7 @@ export const Content = props => {
         </View>
 
         </View>
+        </ScrollView>
     )
 }
 

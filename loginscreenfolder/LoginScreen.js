@@ -98,18 +98,18 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#2e64e5',
+    color: '#16a085',
     fontFamily: 'Lato-Regular',
   },
   buttonContainer: {
     marginTop: 10,
     width: '100%',
     height: windowHeight / 15,
-    backgroundColor: 'cyan',
+    backgroundColor: '#16a085',
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 3,
+    borderRadius: 15,
   },
   buttonText: {
     fontSize: 18,
