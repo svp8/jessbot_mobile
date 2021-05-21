@@ -26,16 +26,21 @@ const LoginScreen = ({navigation}) => {
     if (password == 1) {
       alert('You tapped the button!');
       // Переход в меню и очищение стэка окон (при нажатии кнопки назад из меню вы выходите из окна)
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            {
-              name: 'Details',
-            },
-          ],
-        }),
-      );
+      navigation.navigate('Details', {
+            screen: 'Settings',
+            params: { phone: phone },
+          })
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 1,
+      //     routes: [
+      //       {name: 'Details',
+      //       params: { phone:"555" },
+      //     },
+            
+      //     ],
+      //   }),
+      // );
     }
 
     if (phone.length > 2) {

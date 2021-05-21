@@ -2,7 +2,8 @@ import React from 'react'
 import {View,Text, Image, StyleSheet, TextInput,TouchableOpacity,Switch, ScrollView} from 'react-native'
 import ToggleSwitch from 'toggle-switch-react-native'
 
-export const Content = props => {
+export const Content = ({ navigation, route }) => {
+    const {phone}=route.params;
     const [isSwitchEnabled1, setSwitch1]= React.useState(false),
     [isSwitchEnabled2, setSwitch2]= React.useState(false)
     return (
@@ -15,9 +16,10 @@ export const Content = props => {
                 source={require('../assets/phone.png')}/>
                 <Text style={styles.text}> Телефон: </Text>
             </View>
-            <TextInput style={styles.input} 
-            placeholder="+7(xxx)xxx-xx-xx"/>
-
+            <TextInput style={styles.input}
+            value={"+"+phone} 
+            
+/>
             <View style={styles.notifications}>
             <View style={styles.icontext}>
                 <Image 

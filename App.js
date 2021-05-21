@@ -36,6 +36,7 @@ export default function App() {
 }
 const Drawer = createDrawerNavigator();
 function DetailsScreen() {
+ 
   return (
     <Drawer.Navigator
       initialRouteName="N"
