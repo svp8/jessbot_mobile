@@ -1,5 +1,6 @@
 import React from 'react'
 import {View,Text, Image, StyleSheet, TextInput,TouchableOpacity,Switch, ScrollView} from 'react-native'
+import { color } from 'react-native-reanimated'
 import ToggleSwitch from 'toggle-switch-react-native'
 
 export const Content = props => {
@@ -69,9 +70,9 @@ export const Content = props => {
         <View style={styles.button}>
             <TouchableOpacity onPress = {() => {/* do this */}}>
             <View style = {{backgroundColor: '#16a085', alignItems: 'center', 
-                    justifyContent: 'flex-end', borderRadius: 15, paddingTop:10, paddingBottom:10}}
+                    justifyContent: 'flex-end', borderRadius: 15, paddingTop:10, paddingBottom:10, height:48,justifyContent: 'center',}}
            >
-            <Text style = {{color: 'white'}}>Сохранить настройки</Text>
+            <Text style = {{color: 'white',fontSize: 16,}}>Сохранить настройки</Text>
             </View>
             </TouchableOpacity>
         </View>
@@ -115,7 +116,8 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
    button:{
-        paddingTop: '3%'
+        paddingTop: '3%',
+        
    },
    notifications : {
         alignItems: 'flex-start'
