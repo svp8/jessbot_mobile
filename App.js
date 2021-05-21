@@ -2,10 +2,13 @@ import { StatusBar } from "expo-status-bar";
 
 import { Navbar } from "./src/Navbar";
 import { Content } from "./src/Content";
+import { AlgoListSimulator } from "./src/AlgoListSimulator";
+import { Simulator } from "./src/Simulator"
 import React, { useState } from "react";
 import { Text, View, Image, StyleSheet, Button, TextInput } from "react-native";
 import LoginScreen from "./loginscreenfolder/LoginScreen";
 import FormInput from "./loginscreenfolder/FormInput";
+
 
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
@@ -46,6 +49,8 @@ function DetailsScreen() {
     >
     <Drawer.Screen name="Home" component={HomeScreen} />
     <Drawer.Screen name="Settings" component={Content} />
+    <Drawer.Screen name="Algo List (Simulator)" component={AlgoListSimulator} />
+    <Drawer.Screen name="Simulator" component={Simulator} />
 
     </Drawer.Navigator>
     
