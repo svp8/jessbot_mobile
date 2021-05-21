@@ -102,14 +102,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
   },
   buttonContainer: {
-    marginTop: 10,
+     marginTop: 10,
     width: '100%',
     height: windowHeight / 15,
-    backgroundColor: 'cyan',
+    backgroundColor: '#16a085',
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 3,
+    borderRadius: 15,
   },
   buttonText: {
     fontSize: 18,
