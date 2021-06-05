@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Text,
   ScrollView,
@@ -8,28 +8,60 @@ import {
   TextInput,
   TouchableOpacity,
   Linking,
-} from 'react-native';
-import {windowHeight, windowWidth} from '../utils/Dimensions';
-import FormInput from '../loginscreenfolder/FormInput';
-import {CommonActions} from '@react-navigation/native';
+} from "react-native";
+import { windowHeight, windowWidth } from "../utils/Dimensions";
+import FormInput from "../loginscreenfolder/FormInput";
+import { CommonActions } from "@react-navigation/native";
 
-const LoginScreen = ({navigation}) => {
-  const [buttonText, setButtonText] = useState('Отправить пароль');
-  const [phone, setPhone] = useState('');
+const LoginScreen = ({ navigation }) => {
+  const [buttonText, setButtonText] = useState("Отправить пароль");
+  const [phone, setPhone] = useState("");
   const [pasState, setStatePass] = useState(false);
-  const [password, setPasword] = useState();
-  // кнопка Войти
-  // const resetAction = StackActions.reset({
-  //   actions: [NavigationActions.navigate({routeName: 'Details'})],
-  // });
+  const [password, setPasword] = useState("0");
+  var API_KEY = "9b334c15d9711ee544960c3e96142019";
+  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+
+  const logApi = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/octet-stream",
+        "kekkonen.mode": "invoke",
+      },
+      body: JSON.stringify({ phone: phone }),
+    };
+    fetch("https://staging.jess-bot.ru/auth/init-login", requestOptions);
+  };
+
   const checkPass = () => {
-    if (password == 1) {
-      alert('You tapped the button!');
-      // Переход в меню и очищение стэка окон (при нажатии кнопки назад из меню вы выходите из окна)
-      navigation.navigate('Details', {
-            screen: 'Settings',
-            params: { phone: phone },
-          })
+   
+    if (password != "0") {
+     
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/octet-stream",
+          "kekkonen.mode": "invoke",
+        },
+        body: JSON.stringify({ code: password, phone: phone }),
+      };
+      fetch("https://staging.jess-bot.ru/auth/sign-in", requestOptions)
+        .then((response) => response.json())
+        .then((data) => setData(data)).finally(() => setLoading(false));
+      if(!isLoading){
+      if (data.token != null) {
+        alert(data.token);
+        // Переход в меню (и очищение стэка окон(это сломалось)) (при нажатии кнопки назад из меню вы выходите из окна)
+        navigation.navigate("Details", {
+          screen: "Settings",
+          params: { phone: phone },
+        });
+      } else {
+        alert(data.status);
+      }}
       // navigation.dispatch(
       //   CommonActions.reset({
       //     index: 1,
@@ -37,27 +69,28 @@ const LoginScreen = ({navigation}) => {
       //       {name: 'Details',
       //       params: { phone:"555" },
       //     },
-            
+
       //     ],
       //   }),
       // );
     }
 
-    if (phone.length > 2) {
+     if (phone.length > 2 && pasState == false) {
       setStatePass(true);
-      setButtonText('Войти');
+      logApi();
+      setButtonText("Войти");
     }
   };
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image
-        source={require('../logo.png')}
+        source={require("../logo.png")}
         resizeMode="contain"
-        style={{width: 200, height: 111}}
+        style={{ width: 200, height: 111 }}
       />
       <FormInput
         labelValue={phone}
-        onChangeText={userPhone => setPhone(userPhone)}
+        onChangeText={(userPhone) => setPhone(userPhone)}
         placeholderText="Номер телефона"
         iconType="phone"
         keyboardType="phone-pad"
@@ -68,7 +101,7 @@ const LoginScreen = ({navigation}) => {
       {pasState ? (
         <FormInput
           labelValue={password}
-          onChangeText={userPass => setPasword(userPass)}
+          onChangeText={(userPass) => setPasword(userPass)}
           placeholderText="Пароль"
           iconType="lock"
           keyboardType="default"
@@ -83,10 +116,11 @@ const LoginScreen = ({navigation}) => {
       </TouchableOpacity>
       {/* Кнопка "Создать аккаунт" */}
       <TouchableOpacity
-        style={{marginVertical: 35}}
+        style={{ marginVertical: 35 }}
         onPress={() =>
-          Linking.openURL('https://app.jess-bot.ru/index.html#/signup')
-        }>
+          Linking.openURL("https://app.jess-bot.ru/index.html#/signup")
+        }
+      >
         <Text style={styles.text}>Создать аккаунт</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -95,32 +129,32 @@ const LoginScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
     paddingTop: 120,
   },
   text: {
     fontSize: 18,
-    fontWeight: '500',
-    color: '#2e64e5',
-    fontFamily: 'Lato-Regular',
+    fontWeight: "500",
+    color: "#2e64e5",
+    fontFamily: "Lato-Regular",
   },
   buttonContainer: {
-     marginTop: 10,
-    width: '100%',
+    marginTop: 10,
+    width: "100%",
     height: windowHeight / 15,
-    backgroundColor: '#16a085',
+    backgroundColor: "#16a085",
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 15,
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#ffffff',
-    fontFamily: 'Lato-Regular',
+    fontWeight: "bold",
+    color: "#ffffff",
+    fontFamily: "Lato-Regular",
   },
 });
 export default LoginScreen;
