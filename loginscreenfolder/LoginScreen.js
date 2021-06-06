@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "500",
     color: "#2e64e5",
-    fontFamily: "Lato-Regular",
   },
   buttonContainer: {
     marginTop: 10,
@@ -158,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#ffffff",
-    fontFamily: "Lato-Regular",
   },
 });
 export default LoginScreen;
