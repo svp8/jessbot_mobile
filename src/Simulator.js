@@ -106,7 +106,7 @@ const ExpandableComponent = ({item, onCkickFunction}) => {
 }
 
 
-export const Simulator = props => {
+export const Simulator = ({ navigation, route }) => {
     const [multiSelect, setmultiSelect]=useState(false);
     const [listDataSource, setlistDataSource]=useState(CONTENT)
 
