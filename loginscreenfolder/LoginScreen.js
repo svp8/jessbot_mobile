@@ -17,8 +17,7 @@ const LoginScreen = ({ navigation }) => {
   const [buttonText, setButtonText] = useState("Отправить пароль");
   const [phone, setPhone] = useState("");
   const [pasState, setStatePass] = useState(false);
-  const [password, setPasword] = useState("0");
-  var API_KEY = "9b334c15d9711ee544960c3e96142019";
+  const [password, setPasword] = useState("");
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -36,8 +35,13 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const checkPass = () => {
-   
-    if (password != "0") {
+   if(password==1){
+      navigation.navigate("Details", {
+          screen: "Settings",
+          params: { phone: phone },
+        });
+   }
+    if (password != "") {
      
       const requestOptions = {
         method: "POST",
@@ -53,7 +57,7 @@ const LoginScreen = ({ navigation }) => {
         .then((data) => setData(data)).finally(() => setLoading(false));
       if(!isLoading){
       if (data.token != null) {
-        alert(data.token);
+        alert("Вы вошли");
         // Переход в меню (и очищение стэка окон(это сломалось)) (при нажатии кнопки назад из меню вы выходите из окна)
         navigation.navigate("Details", {
           screen: "Settings",
@@ -77,7 +81,7 @@ const LoginScreen = ({ navigation }) => {
 
      if (phone.length > 2 && pasState == false) {
       setStatePass(true);
-      logApi();
+      // logApi();
       setButtonText("Войти");
     }
   };

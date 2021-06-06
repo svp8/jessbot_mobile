@@ -1,12 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {View,Text, Image, StyleSheet, TextInput,TouchableOpacity,Switch, ScrollView} from 'react-native'
 import { color } from 'react-native-reanimated'
 import ToggleSwitch from 'toggle-switch-react-native'
 
 export const Content = ({ navigation, route }) => {
     const {phone}=route.params;
+    const [data, setData] = React.useState("");
     const [isSwitchEnabled1, setSwitch1]= React.useState(false),
     [isSwitchEnabled2, setSwitch2]= React.useState(false)
+    
+    const test=()=>{
+    const requestOptions = {
+    method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "kekkonen.mode": "invoke",
+      },
+    };
+    fetch('https://staging.jess-bot.ru/algos/my-algos', requestOptions)
+        .then(response => response.text())
+        .then(data => setData(data));
+    alert(data);
+}
     return (
         <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
@@ -70,7 +86,7 @@ export const Content = ({ navigation, route }) => {
                  />
 
         <View style={styles.button}>
-            <TouchableOpacity onPress = {() => {/* do this */}}>
+            <TouchableOpacity onPress = {test}>
             <View style = {{backgroundColor: '#16a085', alignItems: 'center', 
                     justifyContent: 'flex-end', borderRadius: 15, paddingTop:10, paddingBottom:10, height:48,justifyContent: 'center',}}
            >
