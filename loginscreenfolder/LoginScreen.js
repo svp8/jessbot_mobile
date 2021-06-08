@@ -20,6 +20,8 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPasword] = useState("");
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  var test1 = "a1";
+  var test2 = [];
 
   const logApi = () => {
     const requestOptions = {
@@ -35,54 +37,57 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const checkPass = () => {
-   if(password==1){
-      navigation.navigate("Details", {
-          screen: "Settings",
-          params: { phone: phone },
-        });
-   }
-    if (password != "") {
-     
+    if (phone.length > 2) {
+      setStatePass(true);
+
+      if(pasState!=true){
+          logApi();}
+      setButtonText("Войти");
+    }
+// Вход для теста
+    if (password == 1) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            {name: 'Details',
+            params: { phone: phone, token: "aaa"},
+          },
+
+          ],
+        }),
+      );
+      // navigation.navigate("Details", { phone: phone, token: "aaa" });
+      setStatePass(false);
+    } else if (password != "" && pasState == true) {
       const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/octet-stream",
+          Accept: "application/json",
           "kekkonen.mode": "invoke",
         },
         body: JSON.stringify({ code: password, phone: phone }),
       };
       fetch("https://staging.jess-bot.ru/auth/sign-in", requestOptions)
         .then((response) => response.json())
-        .then((data) => setData(data)).finally(() => setLoading(false));
-      if(!isLoading){
-      if (data.token != null) {
-        alert("Вы вошли");
-        // Переход в меню (и очищение стэка окон(это сломалось)) (при нажатии кнопки назад из меню вы выходите из окна)
-        navigation.navigate("Details", {
-          screen: "Settings",
-          params: { phone: phone },
-        });
-      } else {
-        alert(data.status);
-      }}
-      // navigation.dispatch(
-      //   CommonActions.reset({
-      //     index: 1,
-      //     routes: [
-      //       {name: 'Details',
-      //       params: { phone:"555" },
-      //     },
+        .then((data4) => setData(data4))
+        .then(() => setLoading(false));
+      console.log(isLoading);
 
-      //     ],
-      //   }),
-      // );
-    }
-
-     if (phone.length > 2 && pasState == false) {
-      setStatePass(true);
-      // logApi();
-      setButtonText("Войти");
+      if (!isLoading) {
+        if (data.token != null) {
+          var token = data.token;
+          
+          alert("Вы вошли");
+          // Переход в меню (и очищение стэка окон(это сломалось)) (при нажатии кнопки назад из меню вы выходите из окна)
+          navigation.navigate("Details", { phone: phone, token: token }); 
+        } else {
+          
+          alert(data.status);
+        }
+      }
+      
     }
   };
   return (

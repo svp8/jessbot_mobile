@@ -9,6 +9,7 @@ import { Text, View, Image, StyleSheet, Button, TextInput } from "react-native";
 import LoginScreen from "./loginscreenfolder/LoginScreen";
 import FormInput from "./loginscreenfolder/FormInput";
 
+
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -25,6 +26,7 @@ export default function App() {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+        
         <Stack.Screen
           name="Details"
           component={DetailsScreen}
@@ -40,17 +42,25 @@ export default function App() {
   );
 }
 const Drawer = createDrawerNavigator();
-function DetailsScreen() {
+function DetailsScreen({ navigation, route }) {
+  const { token } = route.params;
+  const { phone } = route.params;
   return (
     <Drawer.Navigator
-      initialRouteName="N"
+      initialRouteName="Settings"
       screenOptions={{
         headerShown: true,
       }}
     >
-      <Drawer.Screen name="Settings" component={Content} options={{ title: "Настройки" }} />
+      <Drawer.Screen
+        name="Settings"
+        initialParams={{ token: token,phone:phone }}
+        component={Content}
+        options={{ title: "Настройки" }}
+      />
 
       <Drawer.Screen
+        initialParams={{ token: token }}
         name="Algo List (Simulator)"
         component={AlgoListSimulator}
         options={{ title: "Симулятор" }}
