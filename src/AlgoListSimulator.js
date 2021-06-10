@@ -52,7 +52,7 @@ export const AlgoListSimulator = ({ navigation, route }) => {
       <View style={styles.content}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Simulator")}
+          onPress={() => navigation.navigate("SelectStrategy")}
         >
           <Text style={{ color: "white", fontSize: 16 }}>Создать алго</Text>
         </TouchableOpacity>

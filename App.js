@@ -3,7 +3,10 @@ import { StatusBar } from "expo-status-bar";
 import { Navbar } from "./src/Navbar";
 import { Content } from "./src/Content";
 import { AlgoListSimulator } from "./src/AlgoListSimulator";
-import { Simulator } from "./src/Simulator";
+import { SelectStrategy } from "./src/SelectStrategy";
+import { If } from "./src/If";
+import { Loop } from "./src/Loop";
+import { Sell } from "./src/Sell";
 import React, { useState } from "react";
 import { Text, View, Image, StyleSheet, Button, TextInput } from "react-native";
 import LoginScreen from "./loginscreenfolder/LoginScreen";
@@ -33,9 +36,27 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Simulator"
-          component={Simulator}
+          name="SelectStrategy"
+          component={SelectStrategy}
           options={{ title: "Создать Алго" }}
+        />
+
+        <Stack.Screen
+          name="If"
+          component={If}
+          options={{ title: "If" }}
+        />
+
+        <Stack.Screen
+          name="Loop"
+          component={Loop}
+          options={{ title: "Loop" }}
+        />
+
+        <Stack.Screen
+          name="Sell"
+          component={Sell}
+          options={{ title: "Sell" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
