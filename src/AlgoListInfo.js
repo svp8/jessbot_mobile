@@ -18,12 +18,33 @@ export const AlgoListInfo = ({ navigation, route }) => {
   const { id } = route.params;
   const { data } = route.params;
   const { token } = route.params;
+  const { dBuy } = route.params;
+  const { dSell } = route.params;
+var date1=dBuy.toString();
+
   // Пока использую мой токен для тестов
   const t =
     "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYifQ.EWGA84Y_LfE1-zIA1foijerLIezeTQ6gSQeN09hCuZFgf8YXQ1prVjsDJ4Wbfz_HtIoFjT-2M_qf890CJA6mBr6wxISlZzr4DDPaOuV1lwbZfoPSlMoDKX83_INMXrkxjckD39slVW_ZWneniX_ksf1-FUxwi6bSyXtvLeI_fvFDZR0rDA67Yniq-ze2ipQXoAmpXvAXShdCR_EgMmq2ykBB6-LhsBEB2ZHQ-vokWXrKepaVE83hJeFSsSD1ulPAlPv6V8OxnYbtlUSzP5GX-ZCWW26BSITTSgDoqu4nOB2o7Mm8vnTJSxpTcK-RdCCo9fL_LaGyDq2QH9oUajpgYA.Jg1HOfhczNSHT-ilmPCyqg.sDw-DqghR9yJ0twB4Hj9eZRzKGVi1E-VBDItAJKgVo3bcI_ybFF4kKVFSAJBp-HxAHMOUKGWTswexteIfZoyQbIcZYUQbf_oNPiIcvSsXNbNKwg_3OYJ59IYEh2dPKXu.jLjq9PmCDe8sikdnbl8HOw";
   console.log(data);
 
   const [isLoading, setLoading] = useState(true);
+Date.prototype.getFromFormat = function(format) {
+    var yyyy = this.getFullYear().toString();
+    format = format.replace(/yyyy/g, yyyy)
+    var mm = (this.getMonth()+1).toString(); 
+    format = format.replace(/mm/g, (mm[1]?mm:"0"+mm[0]));
+    var dd  = this.getDate().toString();
+    format = format.replace(/dd/g, (dd[1]?dd:"0"+dd[0]));
+    var hh = this.getHours().toString();
+    format = format.replace(/hh/g, (hh[1]?hh:"0"+hh[0]));
+    var ii = this.getMinutes().toString();
+    format = format.replace(/ii/g, (ii[1]?ii:"0"+ii[0]));
+    var ss  = this.getSeconds().toString();
+    format = format.replace(/ss/g, (ss[1]?ss:"0"+ss[0]));
+    return format;
+};
+var date1=dBuy.getFromFormat('yyyy-mm-dd hh:ii:ss');
+var date2 = dSell.getFromFormat('yyyy-mm-dd hh:ii:ss');
 
 const stopAlgo=()=>{
     const requestOptions = {
@@ -78,9 +99,19 @@ const deleteAlgo=()=>{
       <View style={styles.orders}>
         <Text style={styles.headers}>{data.request.strategy} стратегия:</Text>
         <View style={styles.table}>
-          <Text>Время</Text>
+          <Text>Время                 </Text>
           <Text>Операция</Text>
           <Text>Цена</Text>
+        </View>
+        <View style={styles.table2}>
+          <Text>{date1}</Text>
+          <Text>buy</Text>
+          <Text>12</Text>
+        </View>
+        <View style={styles.table2}>
+          <Text>{date2}</Text>
+          <Text>sell</Text>
+          <Text>18</Text>
         </View>
         <View style={styles.separator} />
       </View>
@@ -171,7 +202,12 @@ algotext: {
   },
   table: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    fontSize: 14,
+  },
+  table2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     fontSize: 14,
   },
   buttonStop: {
@@ -195,7 +231,7 @@ buttonChange: {
     borderWidth: 1,
     borderRadius: 6,
     borderColor: "#e7e9ec",
-    marginBottom: 8,
+    marginBottom:12,
     padding: 6,
   },
   separator: {
