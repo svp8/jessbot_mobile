@@ -4,6 +4,7 @@ import { Navbar } from "./src/Navbar";
 import { Content } from "./src/Content";
 import { AlgoListSimulator } from "./src/AlgoListSimulator";
 import { Simulator } from "./src/Simulator";
+import { AlgoListInfo } from "./src/AlgoListInfo";
 import React, { useState } from "react";
 import { Text, View, Image, StyleSheet, Button, TextInput } from "react-native";
 import LoginScreen from "./loginscreenfolder/LoginScreen";
@@ -36,6 +37,11 @@ export default function App() {
           name="Simulator"
           component={Simulator}
           options={{ title: "Создать Алго" }}
+        />
+        <Stack.Screen
+          name="AlgoListInfo"
+          component={AlgoListInfo}
+          options={{ title: "Алго" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

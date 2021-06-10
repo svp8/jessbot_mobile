@@ -9,27 +9,26 @@ import {
   Switch,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from "react-native";
 import { color } from "react-native-reanimated";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 export const AlgoListSimulator = ({ navigation, route }) => {
-  const { token } = "route.params";
+  const { token } = route.params;
   // Пока использую мой токен для тестов
   const t =
     "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYifQ.EWGA84Y_LfE1-zIA1foijerLIezeTQ6gSQeN09hCuZFgf8YXQ1prVjsDJ4Wbfz_HtIoFjT-2M_qf890CJA6mBr6wxISlZzr4DDPaOuV1lwbZfoPSlMoDKX83_INMXrkxjckD39slVW_ZWneniX_ksf1-FUxwi6bSyXtvLeI_fvFDZR0rDA67Yniq-ze2ipQXoAmpXvAXShdCR_EgMmq2ykBB6-LhsBEB2ZHQ-vokWXrKepaVE83hJeFSsSD1ulPAlPv6V8OxnYbtlUSzP5GX-ZCWW26BSITTSgDoqu4nOB2o7Mm8vnTJSxpTcK-RdCCo9fL_LaGyDq2QH9oUajpgYA.Jg1HOfhczNSHT-ilmPCyqg.sDw-DqghR9yJ0twB4Hj9eZRzKGVi1E-VBDItAJKgVo3bcI_ybFF4kKVFSAJBp-HxAHMOUKGWTswexteIfZoyQbIcZYUQbf_oNPiIcvSsXNbNKwg_3OYJ59IYEh2dPKXu.jLjq9PmCDe8sikdnbl8HOw";
-  console.log(token);
-  const [algo, setAlgo] = useState([
-    { name: "A1", buy: "22", tp: "12", sl: "123", limit: "4", id: "1" },
-    { name: "A2", buy: "22", tp: "12", sl: "123", limit: "4", id: "2" },
-    { name: "A3", buy: "22", tp: "12", sl: "123", limit: "4", id: "3" },
-    { name: "A4", buy: "22", tp: "12", sl: "123", limit: "4", id: "4" },
-    { name: "A5", buy: "22", tp: "12", sl: "123", limit: "4", id: "5" },
-  ]);
+  
   const [data, setData] = React.useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   var l1 = "buy-leg";
+  const showInfo = (id) => {
+    var d = data.find((item) => item.id === id);
+    navigation.navigate("AlgoListInfo", { id: id, data: d,token:token});
+  };
   // API Fetch на фоне
   useEffect(() => {
     const requestOptions = {
@@ -38,17 +37,29 @@ export const AlgoListSimulator = ({ navigation, route }) => {
         "Content-Type": "application/json",
         Accept: "application/json",
         "kekkonen.mode": "invoke",
-        Authorization: "Token " + t,
+        Authorization: "Token " + token,
       },
     };
     fetch("https://staging.jess-bot.ru/algos/my-algos", requestOptions)
       .then((response) => response.json())
       .then((data) => setData(data.algos))
-      .then(() => setLoading(false));
-  }, []);
-  console.log(data);
+      .then(() => setLoading(false)).then(() => setRefreshing(false));
+  }, [refreshing]);
+  // console.log(data[0]["price-details"].price.asks[0].price);
+  // const showInfo=(id)=>{
+  //   console.log(id);
+  // }
+  const handleRefresh=()=>{
+setRefreshing(true);
+console.log("sae")
+  }
   return (
-    <ScrollView>
+    <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+          />
+        }>
       <View style={styles.content}>
         <TouchableOpacity
           style={styles.button}
@@ -65,11 +76,30 @@ export const AlgoListSimulator = ({ navigation, route }) => {
         <FlatList
           keyExtractor={(item) => item.id}
           data={data}
+          
           renderItem={({ item }) => (
-            <View style={styles.orders}>
+            <TouchableOpacity
+              style={styles.orders}
+              onPress={() => showInfo(item.id)}
+            >
               <Text style={{ fontSize: 20 }}>
                 {item.request.lots} {item.request.ticker} ({item.state})
               </Text>
+
+              {item["price-details"] != null ? (
+                <Text
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    fontSize: 20,
+                    padding: 6,
+                  }}
+                >
+                  {item["price-details"].price.bids[0].price}/
+                  {item["price-details"].price.asks[0].price}
+                </Text>
+              ) : null}
+
               {item.request["buy-leg"]["exec-type"] != "limit" ? (
                 <Text style={styles.algotext}>
                   Buy: {item.request["buy-leg"]["exec-type"]}(trigger ={" "}
@@ -82,7 +112,7 @@ export const AlgoListSimulator = ({ navigation, route }) => {
                   {item.request["buy-leg"].limit})
                 </Text>
               )}
-{/* Проверки на SL.TP */}
+              {/* Проверки на SL.TP */}
               {item.request["tp-leg"] != null ? (
                 <Text style={styles.algotext}>
                   TP: {item.request["tp-leg"]["exec-type"]}(trigger ={" "}
@@ -107,11 +137,9 @@ export const AlgoListSimulator = ({ navigation, route }) => {
                   {item.request["sl-leg"]["sl-trailing"]})
                 </Text>
               ) : null}
-              
-            </View>
+            </TouchableOpacity>
           )}
         />
-       
       </View>
     </ScrollView>
   );
@@ -153,6 +181,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   orders: {
+    backgroundColor: "#7CB9E8",
     borderWidth: 2,
     borderRadius: 3,
     borderColor: "#34496e",
