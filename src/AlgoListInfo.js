@@ -28,23 +28,23 @@ var date1=dBuy.toString();
   console.log(data);
 
   const [isLoading, setLoading] = useState(true);
-Date.prototype.getFromFormat = function(format) {
-    var yyyy = this.getFullYear().toString();
-    format = format.replace(/yyyy/g, yyyy)
-    var mm = (this.getMonth()+1).toString(); 
-    format = format.replace(/mm/g, (mm[1]?mm:"0"+mm[0]));
-    var dd  = this.getDate().toString();
-    format = format.replace(/dd/g, (dd[1]?dd:"0"+dd[0]));
-    var hh = this.getHours().toString();
-    format = format.replace(/hh/g, (hh[1]?hh:"0"+hh[0]));
-    var ii = this.getMinutes().toString();
-    format = format.replace(/ii/g, (ii[1]?ii:"0"+ii[0]));
-    var ss  = this.getSeconds().toString();
-    format = format.replace(/ss/g, (ss[1]?ss:"0"+ss[0]));
-    return format;
-};
-var date1=dBuy.getFromFormat('yyyy-mm-dd hh:ii:ss');
-var date2 = dSell.getFromFormat('yyyy-mm-dd hh:ii:ss');
+// Date.prototype.getFromFormat = function(format) {
+//     var yyyy = this.getFullYear().toString();
+//     format = format.replace(/yyyy/g, yyyy)
+//     var mm = (this.getMonth()+1).toString(); 
+//     format = format.replace(/mm/g, (mm[1]?mm:"0"+mm[0]));
+//     var dd  = this.getDate().toString();
+//     format = format.replace(/dd/g, (dd[1]?dd:"0"+dd[0]));
+//     var hh = this.getHours().toString();
+//     format = format.replace(/hh/g, (hh[1]?hh:"0"+hh[0]));
+//     var ii = this.getMinutes().toString();
+//     format = format.replace(/ii/g, (ii[1]?ii:"0"+ii[0]));
+//     var ss  = this.getSeconds().toString();
+//     format = format.replace(/ss/g, (ss[1]?ss:"0"+ss[0]));
+//     return format;
+// };
+
+var date2 = dSell;
 
 const stopAlgo=()=>{
     const requestOptions = {
@@ -104,12 +104,12 @@ const deleteAlgo=()=>{
           <Text>Цена</Text>
         </View>
         <View style={styles.table2}>
-          <Text>{date1}</Text>
+          <Text>11.06.21 12:10</Text>
           <Text>buy</Text>
           <Text>12</Text>
         </View>
         <View style={styles.table2}>
-          <Text>{date2}</Text>
+          <Text>11.06.21 12:12</Text>
           <Text>sell</Text>
           <Text>18</Text>
         </View>

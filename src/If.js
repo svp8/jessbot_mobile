@@ -4,20 +4,86 @@ import { color } from 'react-native-reanimated'
 import ToggleSwitch from 'toggle-switch-react-native'
 
 export const If = ({ navigation, route }) => {
- 
+    const {token}=route.params;
+ const [data, setData] = React.useState([]);
+  const [lots, setLots] =React.useState("");
+  const [limit, setlimit] = React.useState("");
+  const [price, setPrice] = React.useState("");
+  const [slTrailing, setSlTrailing] = React.useState("");
+  const [ticker, setTicker] = React.useState("");
   
+  const [refreshing, setRefreshing] = React.useState(false);
+  
+  
+   const placeAlgo = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/octet-stream",
+        "kekkonen.mode": "invoke",
+        Authorization: "Token " + token,
+      },
+      body: JSON.stringify({ "algo-mode": "real",
+    "buy-leg": {
+    "exec-type": "limit-max",
+    "price": price,
+    "limit": limit,
+    },
+  
+  "sl-leg": {
+    "exec-type": "simple-trailing-sl",
+    "sl-trailing": slTrailing,
+  },
+  "ticker": ticker,
+//   "account-name": "string",
+//   "account-id": "string",
+  "strategy": "if",
+//   "tp-leg": {
+//     "exec-type": "limit-max",
+//     "price": "string",
+//     "limit": "string",
+//     "indicator": {
+//       "indicator": "rsi",
+//       "interval": "30min",
+//       "time-period": 0,
+//       "threshold-buy": 0,
+//       "threshold-sell": 0,
+//       "score": 0
+//     },
+//     "signal-id": "string",
+//     "signal": {
+//       "id": "string",
+//       "user-id": "string",
+//       "meta": {
+//         "combination-type": "except"
+//       },
+//       "state": "deleted",
+//       "signal-id": "string",
+//       "indicators": {},
+//       "threshold": 0
+//     }
+//   },
+  "endpoint": "tinkoff-sb",
+  "lots": parseInt(lots),})};
+    fetch("https://staging.jess-bot.ru/algos/place-algo", requestOptions).then((response) => response.json())
+      .then((data) => console.log(data));
+  };
     return (
         <ScrollView style={styles.scrollView}>
 
 <View style={styles.content}>
     <View style={styles.object}> 
     
-    <TextInput style={styles.input}
+    <TextInput style={styles.input} value={ticker}
+        onChangeText={setTicker}
          placeholder='Тикер'/>
     </View>  
 
     <View style={styles.object}>
         <TextInput style={styles.input}
+        value={lots}
+        onChangeText={setLots}
          placeholder='Лоты'/>
     </View>
 
@@ -29,6 +95,8 @@ export const If = ({ navigation, route }) => {
 
     <View style={styles.object}>
         <TextInput style={styles.input}
+        value={limit}
+        onChangeText={setlimit}
            placeholder='Лимит покупки'/>
     </View>
 
@@ -44,6 +112,8 @@ export const If = ({ navigation, route }) => {
 
     <View style={styles.object}>
         <TextInput style={styles.input}
+        value={price}
+        onChangeText={setPrice}
            placeholder='Маркет(мин)'/>
     </View>
 
@@ -93,11 +163,13 @@ export const If = ({ navigation, route }) => {
 
     <View style={styles.object}>
         <TextInput style={styles.input}
+        value={slTrailing}
+        onChangeText={setSlTrailing}
            placeholder='SL Отставания (traling)'/>
     </View>
 
         <View style={styles.button}>
-            <TouchableOpacity >
+            <TouchableOpacity onPress={placeAlgo}>
             <View style = {{backgroundColor: '#16a085', alignItems: 'center', 
                     justifyContent: 'flex-end', borderRadius: 15, paddingTop:10, paddingBottom:10, height:48,justifyContent: 'center',}}
            >

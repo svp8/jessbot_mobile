@@ -4,7 +4,7 @@ import { color } from 'react-native-reanimated'
 import ToggleSwitch from 'toggle-switch-react-native'
 
 export const SelectStrategy = ({ navigation, route }) => {
-   
+   const {token}=route.params;
   
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -14,7 +14,7 @@ export const SelectStrategy = ({ navigation, route }) => {
 
        <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate("If")}>
+        onPress={() => navigation.navigate("If",{token:token})}>
         <Text style={styles.buttonText} 
         >If</Text>
        </TouchableOpacity>
