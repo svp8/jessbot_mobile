@@ -112,7 +112,7 @@ console.log("sae")
               onPress={() => showInfo(item.id)}
             >
               <Text style={{ fontSize: 20 }}>
-                {item.request.lots} {item.request.ticker} ({item.state})
+                {item.request.lots} VTBR ({item.state})
               </Text>
 
               {item["price-details"] != null ? (

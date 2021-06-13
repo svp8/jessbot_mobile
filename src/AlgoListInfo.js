@@ -93,7 +93,7 @@ const deleteAlgo=()=>{
       <View style={styles.orders}>
         <Text style={styles.headers}>Тикер/Лоты</Text>
         <Text style={styles.text}>
-          {data.request.ticker} / {data.request.lots}
+          VTBR / {data.request.lots}
         </Text>
       </View>
       <View style={styles.orders}>

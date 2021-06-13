@@ -81,7 +81,16 @@ const LoginScreen = ({ navigation }) => {
           
           alert("Вы вошли");
           // Переход в меню (и очищение стэка окон(это сломалось)) (при нажатии кнопки назад из меню вы выходите из окна)
-          navigation.navigate("Details", { phone: phone, token: token }); 
+          navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            {name: 'Details',
+            params: { phone: phone, token:token},
+          },
+
+          ],
+        }), )
         } else {
           
           alert(data.status);
