@@ -15,38 +15,230 @@ import { ListItem, BottomSheet } from "react-native-elements";
 
 export const If = ({ navigation, route }) => {
   const { token } = route.params;
+  const { strategy } = route.params;
   const [data, setData] = React.useState([]);
-  const [lots, setLots] = React.useState("");
-  const [limit, setlimit] = React.useState("");
-  const [price, setPrice] = React.useState("");
-  const [slTrailing, setSlTrailing] = React.useState("");
+  setTimeout(() => {
+    navigation.setOptions({ title: "Стратегия " + strategy });
+  }, 0);
+
   const [ticker, setTicker] = React.useState("");
+  const [lots, setLots] = React.useState("");
+  // buy
+  const [limit, setlimit] = React.useState("");
+  const [triggerBuy, setTriggerBuy] = React.useState("");
+  // tp
+  const [triggerTp, setTriggerTp] = React.useState("");
+  const [limitTp, setlimitTp] = React.useState("");
+  //sl
+  const [priceSl, setPriceSl] = React.useState("");
+  const [triggerSl, setTriggerSl] = React.useState("");
+  const [slTrailing, setSlTrailing] = React.useState("");
+
+  const defaultTemp = { editingIndex: -1, text: "" };
+  const [test1, setTest] = React.useState({ name: "" });
+  const [temp, setTemp] = React.useState(defaultTemp);
   const sheetRef = React.useRef(null);
+  // legs
+  const [buy, setBuy] = React.useState("limit");
+  const [tp, setTp] = React.useState("Не установлено");
+  const [sl, setSl] = React.useState("Не установлено");
 
   const [refreshing, setRefreshing] = React.useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isVisible2, setIsVisible2] = useState(false);
+  const [isVisibleBuy, setIsVisibleBuy] = useState(false);
+  const [isVisibleTp, setIsVisibleTp] = useState(false);
+  const [isVisibleSl, setIsVisibleSl] = useState(false);
+  // buy
   const list = [
-    { title: "List Item 1" ,onPress: () => setIsVisible(false)},
-    { title: "List Item 2" ,onPress: () => setIsVisible(false)},
     {
-      title: "Cancel",
+      title: "limit",
+      onPress: () => (
+        setIsVisibleBuy(false), setBuy("limit"), setlimit(""), setTriggerBuy("")
+      ),
+    },
+    {
+      title: "limit-min",
+      onPress: () => (
+        setIsVisibleBuy(false),
+        setBuy("limit-min"),
+        setlimit(""),
+        setTriggerBuy("")
+      ),
+    },
+    {
+      title: "limit-max",
+      onPress: () => {
+        setBuy("limit-max");
+        setIsVisibleBuy(false);
+        setlimit("");
+        setTriggerBuy("");
+      },
+    },
+    {
+      title: "market-min",
+      onPress: () => (
+        setIsVisibleBuy(false),
+        setBuy("market-min"),
+        setlimit(""),
+        setTriggerBuy("")
+      ),
+    },
+    {
+      title: "market-max",
+      onPress: () => (
+        setIsVisibleBuy(false),
+        setBuy("market-max"),
+        setlimit(""),
+        setTriggerBuy("")
+      ),
+    },
+    {
+      title: "Закрыть",
       containerStyle: { backgroundColor: "red" },
       titleStyle: { color: "white" },
-      onPress: () => setIsVisible(false),
+      onPress: () => setIsVisibleBuy(false),
     },
   ];
-const list2 = [
-    { title: "List Item22 1" ,onPress: () => setIsVisible(false)},
-    { title: "List Item 2" ,onPress: () => setIsVisible(false)},
+  // Tp
+  const list2 = [
     {
-      title: "Cancel",
+      title: "Не установлено",
+      onPress: () => (
+        setIsVisibleTp(false),
+        setTp("Не установлено"),
+        setlimitTp(""),
+        setTriggerTp("")
+      ),
+    },
+    {
+      title: "limit-max",
+      onPress: () => (setIsVisibleTp(false), setTp("limit-max")),
+    },
+    {
+      title: "market-max",
+      onPress: () => (setIsVisibleTp(false), setTp("market-max")),
+    },
+
+    {
+      title: "Закрыть",
       containerStyle: { backgroundColor: "red" },
       titleStyle: { color: "white" },
-      onPress: () => setIsVisible2(false),
+      onPress: () => setIsVisibleTp(false),
     },
   ];
+  // Sl
+  const list3 = [
+    {
+      title: "Не установлено",
+      onPress: () => (
+        setIsVisibleSl(false),
+        setSl("Не установлено"),
+        setPriceSl(""),
+        setTriggerSl(""),
+        setSlTrailing("")
+      ),
+    },
+    {
+      title: "market-min",
+      onPress: () => (
+        setIsVisibleSl(false),
+        setSl("market-min"),
+        setPriceSl(""),
+        setTriggerSl(""),
+        setSlTrailing("")
+      ),
+    },
+    {
+      title: "simple-trailing-sl",
+      onPress: () => (
+        setIsVisibleSl(false),
+        setSl("simple-trailing-sl"),
+        setPriceSl(""),
+        setTriggerSl(""),
+        setSlTrailing("")
+      ),
+    },
+    {
+      title: "trailing-sl",
+      onPress: () => (
+        setIsVisibleSl(false),
+        setSl("trailing-sl"),
+        setPriceSl(""),
+        setTriggerSl(""),
+        setSlTrailing("")
+      ),
+    },
+    {
+      title: "limit-min",
+      onPress: () => (
+        setIsVisibleSl(false),
+        setSl("limit-min"),
+        setPriceSl(""),
+        setTriggerSl(""),
+        setSlTrailing("")
+      ),
+    },
+    {
+      title: "Закрыть",
+      containerStyle: { backgroundColor: "red" },
+      titleStyle: { color: "white" },
+      onPress: () => setIsVisibleSl(false),
+    },
+  ];
+
   const placeAlgo = () => {
+    let buyLeg;
+    let tpLeg;
+    let slLeg;
+    switch (buy) {
+      case "limit":
+        buyLeg = { "exec-type": "limit", limit: limit };
+        break;
+      case "limit-max":
+        buyLeg = { "exec-type": "limit-max", price: triggerBuy, limit: limit };
+        break;
+      case "market-min":
+        buyLeg = { "exec-type": "market-min", price: triggerBuy, limit: limit };
+        break;
+      case "market-max":
+        buyLeg = { "exec-type": "market-max", price: triggerBuy, limit: limit };
+        break;
+    }
+    switch (tp) {
+      case "limit-max":
+        tpLeg = { "exec-type": "limit-max", price: triggerTp, limit: limitTp };
+        break;
+      case "market-max":
+        tpLeg = { "exec-type": "market-max", price: triggerTp };
+        break;
+      default:
+        tpLeg = null;
+        break;
+    }
+    switch (sl) {
+      case "market-min":
+        slLeg = { "exec-type": "market-min", "sl-price": priceSl };
+        break;
+      case "simple-trailing-sl":
+        slLeg = {
+          "exec-type": "simple-trailing-sl",
+          "sl-trailing": slTrailing,
+        };
+        break;
+      case "trailing-sl":
+        slLeg = {
+          "exec-type": "trailing-sl",
+          "sl-price": priceSl,
+          "sl-trailing": slTrailing,
+          "sl-trigger": triggerSl,
+        };
+        break;
+      case "limit-min":
+        slLeg = { "exec-type": "limit-min", "sl-price": priceSl };
+        break;
+      default:
+        slLeg = null;
+        break;
+    }
     const requestOptions = {
       method: "POST",
       headers: {
@@ -57,59 +249,27 @@ const list2 = [
       },
       body: JSON.stringify({
         "algo-mode": "real",
-        "buy-leg": {
-          "exec-type": "limit-max",
-          price: price,
-          limit: limit,
-        },
-
-        "sl-leg": {
-          "exec-type": "simple-trailing-sl",
-          "sl-trailing": slTrailing,
-        },
+        "buy-leg": buyLeg,
+        "sl-leg": slLeg,
         ticker: ticker,
         //   "account-name": "string",
         //   "account-id": "string",
-        strategy: "if",
-        //   "tp-leg": {
-        //     "exec-type": "limit-max",
-        //     "price": "string",
-        //     "limit": "string",
-        //     "indicator": {
-        //       "indicator": "rsi",
-        //       "interval": "30min",
-        //       "time-period": 0,
-        //       "threshold-buy": 0,
-        //       "threshold-sell": 0,
-        //       "score": 0
-        //     },
-        //     "signal-id": "string",
-        //     "signal": {
-        //       "id": "string",
-        //       "user-id": "string",
-        //       "meta": {
-        //         "combination-type": "except"
-        //       },
-        //       "state": "deleted",
-        //       "signal-id": "string",
-        //       "indicators": {},
-        //       "threshold": 0
-        //     }
-        //   },
+        strategy: strategy,
+        "tp-leg": tpLeg,
         endpoint: "tinkoff-sb",
         lots: parseInt(lots),
       }),
     };
     fetch("https://staging.jess-bot.ru/algos/place-algo", requestOptions)
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then((data) => console.log(data))
+      .catch((error) => alert(error));
     navigation.goBack();
   };
-
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <BottomSheet
-        isVisible={isVisible}
+        isVisible={isVisibleBuy}
         containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
       >
         {list.map((l, i) => (
@@ -125,10 +285,26 @@ const list2 = [
         ))}
       </BottomSheet>
       <BottomSheet
-        isVisible={isVisible2}
+        isVisible={isVisibleTp}
         containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
       >
         {list2.map((l, i) => (
+          <ListItem
+            key={i}
+            containerStyle={l.containerStyle}
+            onPress={l.onPress}
+          >
+            <ListItem.Content>
+              <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        ))}
+      </BottomSheet>
+      <BottomSheet
+        isVisible={isVisibleSl}
+        containerStyle={{ backgroundColor: "rgba(0.5, 0.25, 0, 0.2)" }}
+      >
+        {list3.map((l, i) => (
           <ListItem
             key={i}
             containerStyle={l.containerStyle}
@@ -158,117 +334,145 @@ const list2 = [
             placeholder="Лоты"
           />
         </View>
+        {strategy != "sell" ? (
+          <View>
+            <View style={styles.separator} />
+
+            <Text style={{ alignSelf: "center" }}>Покупка</Text>
+            <TouchableOpacity
+          style={styles.button}
+          onPress={() => setIsVisibleBuy(!isVisibleBuy)}
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>
+            Покупка(Buy): {buy} ▼
+          </Text>
+        </TouchableOpacity>
+          </View>
+        ) : null}
+
+        
+        {buy == "limit" && strategy != "sell" ? (
+          <TextInput
+            style={styles.input}
+            placeholder="Лимит покупки"
+            value={limit}
+            onChangeText={setlimit}
+          />
+        ) : null}
+        {buy != "limit" && strategy != "sell" ? (
+          <View style={styles.object}>
+            <TextInput
+              style={styles.input}
+              placeholder="Триггер покупки"
+              value={triggerBuy}
+              onChangeText={setTriggerBuy}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Лимит покупки"
+              value={limit}
+              onChangeText={setlimit}
+            />
+          </View>
+        ) : null}
+        <View style={styles.separator} />
+
+        <Text style={{ alignSelf: "center" }}>TP</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setIsVisibleTp(!isVisibleTp)}
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>TP: {tp} ▼</Text>
+        </TouchableOpacity>
+        {/* TP */}
+        {tp != "Не установлено" && tp == "limit-max" ? (
+          <View style={styles.object}>
+            <TextInput
+              style={styles.input}
+              placeholder="Триггер TP"
+              value={triggerTp}
+              onChangeText={setTriggerTp}
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Лимит TP"
+              value={limitTp}
+              onChangeText={setlimitTp}
+            />
+          </View>
+        ) : null}
+        {tp != "Не установлено" && tp == "market-max" ? (
+          <TextInput
+            style={styles.input}
+            placeholder="Триггер TP"
+            value={triggerTp}
+            onChangeText={setTriggerTp}
+          />
+        ) : null}
 
         <View style={styles.separator} />
 
-        <Text style={{ alignSelf: "center" }}>Покупка:</Text>
-        <Button
-          onPress={()=>(setIsVisible(!isVisible))}
-          //on Press of the button bottom sheet will be visible
-          title="Show Bottom Sheet"
-        />
-         <Button
-          onPress={()=>(setIsVisible2(!isVisible2))}
-          //on Press of the button bottom sheet will be visible
-          title="Show Bottom Sheet"
-        />
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="Лимит(мин)" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="Лимит(макс)" />
-        </View>
-      </View>
-      {/* 
-        <View style={styles.object}>
+        <Text style={{ alignSelf: "center" }}>SL</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setIsVisibleSl(!isVisibleSl)}
+        >
+          <Text style={{ color: "white", fontSize: 16 }}>SL: {sl} ▼</Text>
+        </TouchableOpacity>
+        {/* SL */}
+        {sl != "Не установлено" && sl == "market-min" ? (
           <TextInput
             style={styles.input}
-            value={limit}
-            onChangeText={setlimit}
-            placeholder="Лимит покупки"
+            placeholder="SL Цена"
+            value={priceSl}
+            onChangeText={setPriceSl}
           />
-        </View>
-
-        
-
-        <View style={styles.object}>
+        ) : null}
+        {sl != "Не установлено" && sl == "simple-trailing-sl" ? (
           <TextInput
             style={styles.input}
-            value={price}
-            onChangeText={setPrice}
-            placeholder="Триггер"
-          />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="Маркет(макс)" />
-        </View>
-
-        <Text style={{ alignSelf: "center" }}>Продажа:</Text>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="TP Лимит (макс)" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="TP Маркет (мин)" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="TP Маркет (мин)" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="SL Лимит (мин)" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput
-            style={styles.input}
-            placeholder="SL Отставание от рын. цены"
-          />
-        </View>
-
-        <Text>Trailing SL:</Text>
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="SL цена" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput style={styles.input} placeholder="SL Триггер" />
-        </View>
-
-        <View style={styles.object}>
-          <TextInput
-            style={styles.input}
+            placeholder="Отставание SL лимита от рыночной цены"
             value={slTrailing}
             onChangeText={setSlTrailing}
-            placeholder="SL Отставания (traling)"
           />
-        </View>
-
-        <View style={styles.button}>
-          <TouchableOpacity onPress={placeAlgo}>
-            <View
-              style={{
-                backgroundColor: "#16a085",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                borderRadius: 15,
-                paddingTop: 10,
-                paddingBottom: 10,
-                height: 48,
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ color: "white", fontSize: 16 }}>
-                Сохранить алгоордер
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View> */}
-    </View>
+        ) : null}
+        {sl != "Не установлено" && sl == "trailing-sl" ? (
+          <View style={styles.object}>
+            <TextInput
+              style={styles.input}
+              placeholder="SL Цена"
+              value={priceSl}
+              onChangeText={setPriceSl}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="SL триггер"
+              value={triggerSl}
+              onChangeText={setTriggerSl}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Отставание SL лимита от рыночной цены "
+              value={slTrailing}
+              onChangeText={setSlTrailing}
+            />
+          </View>
+        ) : null}
+        {sl != "Не установлено" && sl == "limit-min" ? (
+          <TextInput
+            style={styles.input}
+            placeholder="SL Цена"
+            value={priceSl}
+            onChangeText={setPriceSl}
+          />
+        ) : null}
+        <TouchableOpacity style={styles.button2} onPress={placeAlgo}>
+          <Text style={{ color: "white", fontSize: 16 }}>Создать Алго</Text>
+        </TouchableOpacity>
+        <View style={styles.object}></View>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -279,7 +483,7 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "column",
     paddingLeft: 10,
-    paddingRight: 0,
+    paddingRight: 10,
     paddingBottom: 20,
   },
   text: {
@@ -287,8 +491,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   object: {
-    paddingBottom: 10,
-    paddingTop: 10,
+    // paddingBottom: 10,
+    // paddingTop: 1,
   },
   tinylogo: {
     width: 25,
@@ -296,11 +500,12 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: "80%",
+    width: "100%",
     padding: 5,
-    paddingBottom: 10,
+    marginBottom: 7,
+    marginTop: 7,
     backgroundColor: "#FFFFFF",
-    borderColor: "#f5f7f7",
+    borderColor: "#4C4B63",
     borderRadius: 6,
     borderWidth: 1,
     fontSize: 16,
@@ -312,7 +517,20 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   button: {
-    paddingTop: "3%",
+    marginTop: 15,
+
+    backgroundColor: "#5386E4",
+    alignItems: "center",
+    borderRadius: 10,
+    padding: 15,
+  },
+  button2: {
+    marginTop: 15,
+
+    backgroundColor: "#16a085",
+    alignItems: "center",
+    borderRadius: 10,
+    padding: 15,
   },
   notifications: {
     alignItems: "flex-start",
@@ -321,58 +539,9 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "#c8c8c8",
     width: "100%",
+    marginTop: 3,
   },
-  panelHeader: {
-    alignItems: "center",
-  },
-  panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#00000040",
-    marginBottom: 10,
-  },
-  panelTitle: {
-    fontSize: 27,
-    height: 35,
-  },
-  panelSubtitle: {
-    fontSize: 14,
-    color: "gray",
-    height: 30,
-    marginBottom: 10,
-  },
-  panelButton: {
-    padding: 13,
-    borderRadius: 10,
-    backgroundColor: "#FF6347",
-    alignItems: "center",
-    marginVertical: 7,
-  },
-  panelButtonTitle: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "white",
-  },
-  action: {
-    flexDirection: "row",
-    marginTop: 10,
-    marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f2f2f2",
-    paddingBottom: 5,
-  },
-  panel: {
-    padding: 20,
-    backgroundColor: "#FFFFFF",
-    paddingTop: 20,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
-    // shadowColor: '#000000',
-    // shadowOffset: {width: 0, height: 0},
-    // shadowRadius: 5,
-    // shadowOpacity: 0.4,
-  },
+
   header: {
     backgroundColor: "#FFFFFF",
     shadowColor: "#333333",

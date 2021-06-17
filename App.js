@@ -8,8 +8,7 @@ import { AlgoListInfo } from "./src/AlgoListInfo";
 
 import { SelectStrategy } from "./src/SelectStrategy";
 import { If } from "./src/If";
-import { Loop } from "./src/Loop";
-import { Sell } from "./src/Sell";
+
 
 import React, { useState } from "react";
 import { Text, View, Image, StyleSheet, Button, TextInput } from "react-native";
@@ -52,20 +51,9 @@ export default function App() {
         <Stack.Screen
           name="If"
           component={If}
-          options={{ title: "If" }}
+          options={{ title: "Создание Алго" }}
         />
 
-        <Stack.Screen
-          name="Loop"
-          component={Loop}
-          options={{ title: "Loop" }}
-        />
-
-        <Stack.Screen
-          name="Sell"
-          component={Sell}
-          options={{ title: "Sell" }}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );

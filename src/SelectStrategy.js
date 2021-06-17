@@ -14,20 +14,20 @@ export const SelectStrategy = ({ navigation, route }) => {
 
        <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate("If",{token:token})}>
+        onPress={() => navigation.navigate("If",{token:token,strategy:"if"})}>
         <Text style={styles.buttonText} 
         >If</Text>
        </TouchableOpacity>
 
        <TouchableOpacity 
        style={styles.buttonContainer}
-       onPress={() => navigation.navigate("Loop")}>
+       onPress={() => navigation.navigate("If",{token:token,strategy:"loop"})}>
         <Text style={styles.buttonText} >Loop</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
        style={styles.buttonContainer}
-       onPress={() => navigation.navigate("Sell")}>
+       onPress={() => navigation.navigate("If",{token:token,strategy:"sell"})}>
         <Text style={styles.buttonText}>Sell</Text>
       </TouchableOpacity>
    
